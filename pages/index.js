@@ -6,42 +6,26 @@ import BrewdogAPI from './../api/brewdog';
 export default class extends React.Component {
 
     /**
-     * @constructor
-     * @inheritDoc
-     */
-    constructor(props){
-        super(props);
-        this.page = 1;
-        this.countPerPage = 2;
-        this.loadMore = this.loadMore.bind(this);
-    }
-
-    /**
      * @returns {{data: Object[]}}
      */
-    static async getInitialProps() {
-        // todo this.page is undefined
-        const res = await BrewdogAPI.getBrewList(this.page, this.countPerPage);
+    static async getInitialProps({query}) {
+        let page = query.page || 1;
+        let countPerPage = 10;
 
-        return {data: res.data};
-    }
+        const res = await BrewdogAPI.getBrewList(page, countPerPage);
 
-    /**
-     * @param e
-     */
-    async loadMore(e) {
-        e.preventDefault();
-        this.page++;
-        const res = await BrewdogAPI.getBrewList(this.page, this.countPerPage);
-        this.setProps(prevState => ({
-            data: prevState.data.concat(res.data)
-        }));
+        return {
+            page: page,
+            countPerPage: countPerPage,
+            data: res.data,
+        };
     }
 
     /**
      * @inheritDoc
      */
     render () {
+        const nextPage = 1 + +this.props.page;
         return (
             <div>
                 <Head>
@@ -65,9 +49,7 @@ export default class extends React.Component {
                         </ul>
                     </div>
                 </div>
-                <a href="#" onClick={this.loadMore}>
-                    Load More
-                </a>
+                <Link href={`/?page=${nextPage}`}>Next page</Link>
             </div>
         );
     }
