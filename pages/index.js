@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import Layout from '../components/layout'
 import BrewdogAPI from './../api/brewdog';
 
 export default class extends React.Component {
@@ -27,12 +28,7 @@ export default class extends React.Component {
     render () {
         const nextPage = 1 + +this.props.page;
         return (
-            <div>
-                <Head>
-                    <title>Brewdog catalog</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" />
-                </Head>
+            <Layout>
                 <div className="pure-g">
                     <div className="pure-u-1-3"></div>
                     <div className="pure-u-1-3">
@@ -50,7 +46,7 @@ export default class extends React.Component {
                     </div>
                 </div>
                 <Link href={`/?page=${nextPage}`}>Next page</Link>
-            </div>
+            </Layout>
         );
     }
 }
